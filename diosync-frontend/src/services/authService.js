@@ -29,6 +29,9 @@ export const ChangePasswordFistTime = (data) => {
   return axiosPost(API?.AUTH?.CHANGE_PASSWORD, data)
 }
 export const LogoutApi = (data) => {
+  console.log(data)
+  console.log("i an logout api");
+
   return axiosPost(API?.AUTH?.LOGOUT, data)
 }
 export const GetProfile = () => {

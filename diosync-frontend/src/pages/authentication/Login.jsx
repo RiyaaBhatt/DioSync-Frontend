@@ -1,37 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import AuthLeftWrapper from '../../components/containers/AuthLeftWrapper'
-import Paragraph from '../../components/core/typography/Paragraph'
-import { Form, Formik } from 'formik'
-import InputType from '../../components/core/formComponents/InputType'
-import Button from '../../components/core/formComponents/Button'
-import FormLabel from '../../components/core/typography/FormLabel'
-import Checkbox from '../../components/core/formComponents/Checkbox'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import Logo from '../../assets/images/logo.svg'
-import { loginValidationSchema } from '../../validations/authentication/loginValidationSchema'
-import { useDispatch } from 'react-redux'
-import { hideLoader, showLoader } from '../../redux/slices/siteLoaderSlice'
-import { paths } from '../../routes/path'
-import { GetUser, LoginUser } from '../../services/authService'
-import { setRefreshToken, setToken, setUser, setUserType } from '../../redux/slices/userSlice'
-import { userRoles } from '../../constants/roleConstants'
+import React, { useEffect, useState } from 'react';
+import AuthLeftWrapper from '../../components/containers/AuthLeftWrapper';
+import Paragraph from '../../components/core/typography/Paragraph';
+import { Form, Formik } from 'formik';
+import InputType from '../../components/core/formComponents/InputType';
+import Button from '../../components/core/formComponents/Button';
+import FormLabel from '../../components/core/typography/FormLabel';
+import Checkbox from '../../components/core/formComponents/Checkbox';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Logo from '../../assets/images/logo.svg';
+import { loginValidationSchema } from '../../validations/authentication/loginValidationSchema';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '../../redux/slices/siteLoaderSlice';
+import { paths } from '../../routes/path';
+import { GetUser, LoginUser } from '../../services/authService';
+import { setRefreshToken, setToken, setUser, setUserType } from '../../redux/slices/userSlice';
+import { userRoles } from '../../constants/roleConstants';
 
 function Login() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
   const [defaultInitialValues, setDefaultInitialValues] = useState({
     email: '',
     password: '',
     rememberMe: false,
-  })
+  });
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location?.search)
+    const queryParams = new URLSearchParams(location?.search);
     if (location?.search && queryParams) {
-      const access = atob(queryParams?.get('access'))
-      const refresh = atob(queryParams?.get('refresh'))
+      const access = atob(queryParams?.get('access'));
+      const refresh = atob(queryParams?.get('refresh'));
       if (access && refresh) {
         const data = {
           token: {
@@ -39,84 +39,119 @@ function Login() {
             refresh,
           },
           user_type: userRoles?.Owner,
-        }
-        handleTempPwdChanged(data)
+        };
+        handleTempPwdChanged(data);
       }
     }
-  }, [dispatch, location?.search])
+  }, [dispatch, location?.search]);
 
   useEffect(() => {
-    const rememberMe = localStorage?.getItem('rememberMe') === 'true' ? true : false
-    const rememberedCreds = rememberMe ? localStorage?.getItem('savedCreds') : ''
+    const rememberMe = localStorage?.getItem('rememberMe') === 'true';
+    const rememberedCreds = rememberMe ? localStorage?.getItem('savedCreds') : '';
     if (rememberedCreds) {
       setDefaultInitialValues({
         email: JSON.parse(rememberedCreds)?.email,
         password: JSON.parse(rememberedCreds)?.password,
         rememberMe: true,
-      })
+      });
     }
-  }, [])
+  }, []);
+
+  async function handleTempPwdChanged(data, params) {
+    console.log('Data in handleTempPwdChanged:', data);
+
+    // Dispatch token and user type actions
+    dispatch(setToken(data?.accessToken));
+    dispatch(setRefreshToken(data?.refreshToken));
+    dispatch(setUserType(data?.user_type));
+
+    // Handle remember me functionality
+    if (params) handleRememberMe(params);
+
+    // Fetch user data
+    try {
+      const userData = await GetUser();
+      console.log('User data fetched:', userData);
+
+      if (userData?.status === 200) {
+        dispatch(setUser(userData?.data?.data));
+      }
+
+      // Navigate based on user type
+      console.log('User type:', data?.user_type);
+      if (data?.user_type[0] === 'admin') {
+        console.log('Navigating to admin dashboard');
+        navigate(paths?.admin.dashboard);
+      } else if (data?.user_type[0] === 'manager') {
+        console.log('Navigating to manager dashboard');
+        navigate(paths.manager.dashboard);
+      } else if (data?.user_type[0] === 'owner') {
+        console.log('Navigating to owner dashboard');
+        navigate(paths?.owner?.dashboard);
+      } else {
+        console.log('Navigating to default dashboard');
+        navigate(paths?.defaultDashboard); // Ensure you have a default dashboard path
+      }
+
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  }
 
   async function OnSubmit(paramsData) {
-    dispatch(showLoader())
+    dispatch(showLoader());
     const params = {
       email: paramsData?.email,
       password: paramsData?.password,
-    }
+    };
     try {
-      const response = await LoginUser(params)
-      await handleLoginResponse(response, paramsData)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      dispatch(hideLoader())
-    }
-  }
-
-  //Login Response
-  async function handleLoginResponse(response, params) {
-    const { success, status, data } = response?.data
-    if (success && status === 200) {
-      if (data?.is_temp_pwd_changed) {
-        await handleTempPwdChanged(data, params)
+      const response = await LoginUser(params);
+      console.log('Response:', response);
+      if (response && response.data) {
+        await handleLoginResponse(response, paramsData);
       } else {
-        navigateToNewPassword(data)
+        console.error('No response data received');
       }
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      dispatch(hideLoader());
     }
   }
 
-  //handle Temp password changed
-  async function handleTempPwdChanged(data, params) {
-    dispatch(setToken(data?.token?.access))
-    dispatch(setRefreshToken(data?.token?.refresh))
-    dispatch(setUserType(data?.user_type))
-    params && handleRememberMe(params)
-    const userData = await GetUser()
-    // const { status } = userData
-    if (userData?.status === 200) {
-      dispatch(setUser(userData?.data?.data))
-    }
-    if (data?.user_type === userRoles.SuperAdmin) {
-      navigate(paths?.admin?.dashboard)
-    } else if (data?.user_type === userRoles.Manager) {
-      navigate(paths.manager.dashboard)
-    } else if (data?.user_type === userRoles.Owner) {
-      navigate(paths?.owner?.dashboard)
-    }
-  }
+  async function handleLoginResponse(response, params) {
+    // Log the entire response object
+    console.log('Response Object:', response);
+    console.log('Response Data:', response.data);
 
-  function handleRememberMe(params) {
-    if (params?.rememberMe) {
-      localStorage.setItem('savedCreds', JSON.stringify(params))
-      localStorage.setItem('rememberMe', params?.rememberMe)
+    const { status, data } = response;
+    if (status === 200 && data?.accessToken) {
+      if (data?.is_temp_pwd_changed) {
+        // console.log("first true");
+        
+        await handleTempPwdChanged(data, params);
+        // console.log('data after temp change',data)
+      } else {
+        navigateToNewPassword(data);
+      }
     } else {
-      localStorage.removeItem('savedCreds')
-      localStorage.removeItem('rememberMe')
+      console.error('Login failed:', data);
     }
   }
 
   function navigateToNewPassword(data) {
-    navigate(paths.auth.changePassword, { state: { secret: data?.secret } })
+    console.log('Navigating to change password');
+    navigate(paths.auth.changePassword, { state: { secret: data?.secret } });
+  }
+
+  function handleRememberMe(params) {
+    if (params?.rememberMe) {
+      localStorage.setItem('savedCreds', JSON.stringify(params));
+      localStorage.setItem('rememberMe', params?.rememberMe);
+    } else {
+      localStorage.removeItem('savedCreds');
+      localStorage.removeItem('rememberMe');
+    }
   }
 
   return (
@@ -187,7 +222,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -116,7 +116,7 @@ const OTP = () => {
         }
       })
     } else {
-      setErrorMessage('Please enter OTP ')
+      setErrorMessage('Please enter OTP')
     }
     dispatch(hideLoader())
   }

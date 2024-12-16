@@ -1,8 +1,11 @@
 export const API = {
   AUTH: {
+    // LOGIN: '/accounts/login',
     LOGIN: '/accounts/login',
     LOGOUT: '/accounts/logout',
     REFRESH_TOKEN: '/accounts/token/refresh',
+    // REFRESH_TOKEN: '/accounts/refresh',
+
     USER: '/accounts/user',
     FORGOT: '/accounts/forget-password/send-mail',
     VERIFY_OTP: '/accounts/forget-password/verify-code',

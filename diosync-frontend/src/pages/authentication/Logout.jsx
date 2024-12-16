@@ -29,6 +29,7 @@ const Logout = (props) => {
       refresh_token: refreshToken,
     }
     const response = await LogoutApi(data)
+       console.log(data)
     dispatch(showLoader())
     if (response?.status === 200) {
       dispatch(setToken(null))

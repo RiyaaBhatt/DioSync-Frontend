@@ -3,9 +3,10 @@ import axios from 'axios'
 import { ToastShow } from '../redux/slices/toastSlice'
 import { API } from '../apiEndPoints/apiEndPoints'
 
-// const BASE_URL = process.env.REACT_APP_API_URL
+// const BASE_URL = "http://localhost:1234"
+// console.log(BASE_URL)
 
-const BASE_URL="http://localhost:1234"
+const BASE_URL = "http://localhost:1234"
 const setupAxios = (store) => {
   axios.interceptors.request.use((request) => {
     const storeData = store.getState()
@@ -86,7 +87,7 @@ export default setupAxios
 
 // export async function axiosGet(url, data = null) {
 //   console.log(`${BASE_URL}${url}`);
-  
+
 //   const data2= await axios.get(`${BASE_URL}${url}`, {
 //     params: data,
 //   })
@@ -95,7 +96,7 @@ export default setupAxios
 // }
 export async function axiosGet(url, data = null) {
   console.log(`hi i am calling this ${BASE_URL}${url}`);
-  
+
   try {
     const response = await axios.get(`${BASE_URL}${url}`, {
       params: data,
@@ -108,7 +109,7 @@ export async function axiosGet(url, data = null) {
   }
 }
 export function axiosPost(url, data, headers) {
-  return axios.post(`${BASE_URL}${url}`, data, headers ?? {})
+  return axios.post(`${BASE_URL}${url}`, data, headers ?? {});
 }
 
 export const axiosConfig = (method, url, config, data) => {
@@ -128,7 +129,7 @@ export const axiosPut = (url, data) => {
   return axios.put(`${BASE_URL}${url}`, data)
 }
 
-export const axiosDelete = (url, data=null) => {
+export const axiosDelete = (url, data = null) => {
   console.log(url)
-  return axios.delete(`${BASE_URL}${url}`,  data )
+  return axios.delete(`${BASE_URL}${url}`, data)
 }

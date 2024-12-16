@@ -10,7 +10,7 @@ import Wrapper from '../components/themeComponents/Wrapper'
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* <Route element={<SecurityCheck />}> */}
+      <Route element={<SecurityCheck />}>
         <Route element={<Wrapper />}>
           {(routeMatch.Owner || [])?.map((route, id) => (
             <Route key={id} path={route.path} element={<route.element />} />
@@ -22,7 +22,7 @@ const AppRoutes = () => {
             <Route key={id} path={route.path} element={<route.element />} />
           ))}
         </Route>
-      {/* </Route> */}
+      </Route>
 
       {AuthRoutes?.map((route, id) => (
         <Route
