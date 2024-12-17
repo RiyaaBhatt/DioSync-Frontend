@@ -23,6 +23,7 @@ function MailSettings() {
     try {
       const response = await GetMailSettings()
       if (response?.data?.data) {
+        console.log(response.data);
         setDefaultInitialValues(response.data.data)
       }
     } catch (error) {

@@ -93,7 +93,7 @@ const ItemsListing = () => {
   }, [searchItem])
   const getItemsData = async () => {
     console.log("hi this is getItemsDATA method and i am inside Item Listing componenent");
-    
+
     dispatch(showLoader())
     const orderVal = order ? '' : '-'
     let queryString = ``
@@ -104,11 +104,11 @@ const ItemsListing = () => {
       queryString += ``
     }
     const response = await GetItems(queryString)
-    console.log("this is response ",response);
+    console.log("this is response ", response);
 
 
     const results = response?.data?.data || []
-    console.log("Hello I came from axios middleware",results)
+    console.log("Hello I came from axios middleware", results)
     const count = response?.data?.data?.count || 0
     setTotalCount(count)
     setCurrentItems(results)
@@ -143,20 +143,20 @@ const ItemsListing = () => {
     setOpenDeleteModal(false)
     setSelectedItem('')
   }
-  const handleUpdateItems = async (data,id) => {
+  const handleUpdateItems = async (data, id) => {
     dispatch(showLoader())
     console.log(data);
-    
-    setSelectedItem(data); 
-    setOpenModal(true); 
-    
+
+    setSelectedItem(data);
+    setOpenModal(true);
+
     const response = await UpdateItems(data)
     if (response?.status === 200) {
       deleteToastFun('Item updated successfully', 'success')
       handleCloseModal()
 
       getItemsData()
-      
+
     } else {
       deleteToastFun('Something went wrong', 'error')
     }
@@ -165,26 +165,26 @@ const ItemsListing = () => {
 
   const handleDeleteItems = async (id) => {
     dispatch(showLoader())
-    
+
     const response = await DeleteItems(id)
     if (response?.status === 200) {
       deleteToastFun('Item deleted successfully', 'success')
       handleCloseDeleteModal()
 
       getItemsData()
-      
+
     } else {
       deleteToastFun('Something went wrong', 'error')
     }
     dispatch(hideLoader())
   }
   const handleOptions = (optionValue, item) => {
-    console.log("hello i am update item ",item)
-console.log(optionValue);
+    console.log("hello i am update item ", item)
+    console.log(optionValue);
 
     switch (optionValue) {
       case UPDATE:
-        console.log("hello i am inside update item ",item)
+        console.log("hello i am inside update item ", item)
         setSelectedItem(item); // Set the selected item for editing
         setOpenModal(true); // Open the modal for editing
         break;
@@ -194,7 +194,7 @@ console.log(optionValue);
         break;
       default:
         console.log("hello i am default case");
-        
+
         break;
     }
   };
@@ -283,8 +283,8 @@ console.log(optionValue);
               totalCount={totalCount}
               handleOptions={handleOptions}
               currentItems={currentItems}
-handleDeleteItems={handleDeleteItems}
-handleUpdateItems={handleUpdateItems}
+              handleDeleteItems={handleDeleteItems}
+              handleUpdateItems={handleUpdateItems}
               isEdit={true}
               isDelete={true}
               isView={false}

@@ -37,6 +37,7 @@ import noImage from '../../assets/images/noImg.png'
 import { generalDataSelector } from '../../redux/slices/generalDataSlice'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { NotificationIconType } from '../../utils/commonHelper'
+import { companySelector } from '../../redux/slices/companySlice'
 
 function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
   const dispatch = useDispatch()
@@ -62,7 +63,8 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1) // Track current page
   const itemsPerPage = 10
-
+  const companyname = useSelector(companySelector)
+  console.log("company name at sidebar", companyname);
   useEffect(() => {
     if (title) {
       document.title = title ? `${title + ' -'} DioSync` : 'DioSync'
@@ -148,7 +150,9 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
   const toggleHeaderDropdown = (dropdown) => {
     setIsOpen((prevDropdown) => (prevDropdown === dropdown ? null : dropdown))
   }
+useEffect(()=>{
 
+},[])
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside)
     return () => {
@@ -271,9 +275,8 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
     <div className='lg:h-[calc(100vh-48px)] overflow-y-auto relative' ref={sideBarRef}>
       <div className='flex flex-col items-start gap-10 lg:pt-10 pt-0 lg:pb-0 pb-6'>
         <div
-          className={`${
-            !sideBarOpen ? 'lg:px-11' : 'lg:px-3 justify-center'
-          } flex items-center lg:justify-start justify-between w-full`}
+          className={`${!sideBarOpen ? 'lg:px-11' : 'lg:px-3 justify-center'
+            } flex items-center lg:justify-start justify-between w-full`}
         >
           <div className='w-1/3 lg:hidden block'>
             <button
@@ -284,39 +287,37 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
               }}
             >
               <span
-                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                  navbarOpen ? 'rotate-45 delay-200' : '-translate-y-1.5'
-                }`}
+                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${navbarOpen ? 'rotate-45 delay-200' : '-translate-y-1.5'
+                  }`}
               ></span>
               <span
-                className={`absolute h-0.5 bg-white transform transition-all duration-200 ease-in-out ${
-                  navbarOpen ? 'w-0 opacity-50' : 'w-5 delay-200 opacity-100'
-                }`}
+                className={`absolute h-0.5 bg-white transform transition-all duration-200 ease-in-out ${navbarOpen ? 'w-0 opacity-50' : 'w-5 delay-200 opacity-100'
+                  }`}
               ></span>
               <span
-                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                  navbarOpen ? '-rotate-45 delay-200' : 'translate-y-1.5'
-                }`}
+                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${navbarOpen ? '-rotate-45 delay-200' : 'translate-y-1.5'
+                  }`}
               ></span>
             </button>
           </div>
           <div
-            className={`w-1/3 lg:w-full ${
-              !sideBarOpen ? 'lg:text-left' : 'lg:text-center'
-            }  text-center transition duration-300 ease-in-out  `}
+            className={`w-1/3 lg:w-full ${!sideBarOpen ? 'lg:text-left' : 'lg:text-center'
+              }  text-center transition duration-300 ease-in-out  `}
           >
-            <a href={dashboardIconRedirect} className='transition-all duration-500 ease-in-out inline-block'>
-              <img src={Logo} alt='logo' className='inline-block' />
-            </a>
+            <div className='flex flex-row gap-4'>
+              <a href={dashboardIconRedirect} className='transition-all duration-500 ease-in-out inline-block'>
+                <img src={Logo} alt='logo' className='inline-block' />
+              </a>
+              <div className='text-white'>{companyname.company}</div>
+            </div>
           </div>
           <div className='w-1/3 lg:hidden block'>
             <div className='flex justify-end items-center gap-3'>
               {/* Notification Button */}
               <div className='relative' ref={dropdownRef}>
                 <button
-                  className={`w-8 h-8 ${
-                    isOpen === 'notification' ? 'bg-primary-blue' : 'bg-[#F6F6F61A]'
-                  }  rounded-full flex items-center text-left justify-center relative`}
+                  className={`w-8 h-8 ${isOpen === 'notification' ? 'bg-primary-blue' : 'bg-[#F6F6F61A]'
+                    }  rounded-full flex items-center text-left justify-center relative`}
                   onClick={() => toggleHeaderDropdown('notification')}
                 >
                   <IoNotificationsOutline color='#fff' fontSize={'14px'} />
@@ -369,9 +370,8 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
               {/* Cart Button */}
               <div className='relative' ref={dropdownRef}>
                 <button
-                  className={`w-8 h-8  ${
-                    isOpen === 'cart' ? 'bg-primary-blue' : 'bg-[#F6F6F61A]'
-                  } rounded-full text-left flex items-center justify-center relative me-1`}
+                  className={`w-8 h-8  ${isOpen === 'cart' ? 'bg-primary-blue' : 'bg-[#F6F6F61A]'
+                    } rounded-full text-left flex items-center justify-center relative me-1`}
                   onClick={() => toggleHeaderDropdown('cart')}
                 >
                   <GrCart color='#fff' fontSize={'14px'} />
@@ -432,11 +432,10 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
           </div>
         </div>
         <ul
-          className={`flex flex-col items-start lg:justify-start lg:pt-0 pt-11 lg:pb-0 pb-6 lg:w-full lg:static fixed top-0 bg-site-black transition-all duration-300 ease-in-out z-40 ${
-            sideBarMobileOpen && windowWidth < 992
-              ? 'left-0 sm:w-1/2 w-full h-screen overflow-x-hidden'
-              : '-left-full h-full '
-          }`}
+          className={`flex flex-col items-start lg:justify-start lg:pt-0 pt-11 lg:pb-0 pb-6 lg:w-full lg:static fixed top-0 bg-site-black transition-all duration-300 ease-in-out z-40 ${sideBarMobileOpen && windowWidth < 992
+            ? 'left-0 sm:w-1/2 w-full h-screen overflow-x-hidden'
+            : '-left-full h-full '
+            }`}
         >
           <li className={`absolute top-3 right-4`}>
             <button
@@ -447,19 +446,16 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
               }}
             >
               <span
-                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                  navbarOpen ? 'rotate-45 delay-200' : '-translate-y-1.5'
-                }`}
+                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${navbarOpen ? 'rotate-45 delay-200' : '-translate-y-1.5'
+                  }`}
               ></span>
               <span
-                className={`absolute h-0.5 bg-white transform transition-all duration-200 ease-in-out ${
-                  navbarOpen ? 'w-0 opacity-50' : 'w-5 delay-200 opacity-100'
-                }`}
+                className={`absolute h-0.5 bg-white transform transition-all duration-200 ease-in-out ${navbarOpen ? 'w-0 opacity-50' : 'w-5 delay-200 opacity-100'
+                  }`}
               ></span>
               <span
-                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                  navbarOpen ? '-rotate-45 delay-200' : 'translate-y-1.5'
-                }`}
+                className={`absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${navbarOpen ? '-rotate-45 delay-200' : 'translate-y-1.5'
+                  }`}
               ></span>
             </button>
           </li>
@@ -470,8 +466,7 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
                 <NavLink
                   to={item.href}
                   className={({ isActive }) =>
-                    `text-white text-base leading-6 font-semibold flex items-center ${
-                      !sideBarOpen ? 'justify-start' : 'justify-center'
+                    `text-white text-base leading-6 font-semibold flex items-center ${!sideBarOpen ? 'justify-start' : 'justify-center'
                     } gap-3 ${!sideBarOpen ? 'px-5' : 'px-2'} py-[10px] ${isActive ? 'bg-primary-blue' : ''} rounded-lg ${getNavItemClass(item.href)}`
                   }
                   onClick={() => {
@@ -486,11 +481,9 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
               ) : (
                 <>
                   <button
-                    className={`text-white text-base leading-6 text-left font-semibold flex items-center w-full ${
-                      !sideBarOpen ? 'justify-start' : 'justify-center'
-                    } gap-3 ${!sideBarOpen ? 'px-5' : 'px-2'} py-[10px] rounded-lg ${
-                      openDropdown === item.name ? 'bg-primary-blue/10' : ''
-                    }`}
+                    className={`text-white text-base leading-6 text-left font-semibold flex items-center w-full ${!sideBarOpen ? 'justify-start' : 'justify-center'
+                      } gap-3 ${!sideBarOpen ? 'px-5' : 'px-2'} py-[10px] rounded-lg ${openDropdown === item.name ? 'bg-primary-blue/10' : ''
+                      }`}
                     onClick={() => toggleDropdown(item.name)}
                   >
                     <item.icon size={24} className='flex-shrink-0' />
@@ -547,11 +540,9 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
           </li> */}
           <li className='py-6 block w-full px-2 lg:hidden relative before:w-[calc(100%-48px)] before:h-[1px] before:bg-light-grey before:absolute before:top-0 before:left-0 before:right-0 before:mx-auto'>
             <button
-              className={`text-white text-base leading-6 font-semibold flex items-center w-full ${
-                !sideBarOpen ? 'justify-start' : 'justify-center'
-              } gap-3 ${!sideBarOpen ? 'px-5' : 'px-2'} py-[10px] rounded-lg ${
-                openDropdown === 'profile' ? 'bg-primary-blue/10' : ''
-              }`}
+              className={`text-white text-base leading-6 font-semibold flex items-center w-full ${!sideBarOpen ? 'justify-start' : 'justify-center'
+                } gap-3 ${!sideBarOpen ? 'px-5' : 'px-2'} py-[10px] rounded-lg ${openDropdown === 'profile' ? 'bg-primary-blue/10' : ''
+                }`}
               onClick={() => toggleDropdown('profile')}
             >
               <div
@@ -575,9 +566,8 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
             </button>
             {openDropdown === 'profile' && !sideBarOpen && (
               <div
-                className={`${
-                  openDropdown === 'profile' ? 'max-h-screen' : 'max-h-0'
-                } overflow-hidden transition-all duration-300`}
+                className={`${openDropdown === 'profile' ? 'max-h-screen' : 'max-h-0'
+                  } overflow-hidden transition-all duration-300`}
               >
                 <ul className='pl-0 pt-4'>
                   {mobileViewDropdownItems?.map((item) => (
@@ -603,9 +593,8 @@ function SideBar({ sideBarOpen, sideBarMobileOpen, handleMobileSidebar }) {
           </li>
           <li className='block w-full px-2 lg:hidden'>
             <button
-              className={`text-white text-base leading-6 font-semibold flex items-center w-full ${
-                !sideBarOpen ? 'justify-start' : 'justify-center'
-              } gap-3 px-5 py-[10px] rounded-lg`}
+              className={`text-white text-base leading-6 font-semibold flex items-center w-full ${!sideBarOpen ? 'justify-start' : 'justify-center'
+                } gap-3 px-5 py-[10px] rounded-lg`}
               onClick={() => setIsLogoutModalOpen(true)}
             >
               <RiLogoutCircleRLine size={20} />

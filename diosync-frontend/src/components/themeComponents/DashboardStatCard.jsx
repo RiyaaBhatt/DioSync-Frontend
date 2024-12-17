@@ -91,9 +91,8 @@ function DashboardStatCard({ children, className, expandableItem, expandableBG, 
       </div>
       {props.expandable && (
         <div
-          className={`${
-            expandableBG ? expandableBG : ''
-          } expandable-div absolute w-full left-0 top-full -mt-4 p-4 rounded-b-lg z-10 transition-[max-height] duration-500 ease-in-out overflow-hidden `}
+          className={`${expandableBG ? expandableBG : ''
+            } expandable-div absolute w-full left-0 top-full -mt-4 p-4 rounded-b-lg z-10 transition-[max-height] duration-500 ease-in-out overflow-hidden `}
           ref={contentRef}
           style={{ maxHeight: height }}
         >

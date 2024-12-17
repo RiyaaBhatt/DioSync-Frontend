@@ -48,6 +48,7 @@ function Wrapper() {
 
   return (
     <div className='relative flex flex-wrap items-stretch bg-site-black px-4 lg:px-0 lg:pe-6 py-4'>
+
       {/* Sidebar */}
       {sideBarMobileOpen && (
         <div
@@ -56,9 +57,8 @@ function Wrapper() {
         ></div>
       )}
       <div
-        className={`${
-          sideBarOpen ? 'w-[80px]' : 'w-full lg:w-1/4 xl:w-[20%] xxl:w-1/6'
-        } relative transition-[width] duration-500 ease-in-out lg:z-[20] z-[15]`}
+        className={`${sideBarOpen ? 'w-[80px]' : 'w-full lg:w-1/4 xl:w-[20%] xxl:w-1/6'
+          } relative transition-[width] duration-500 ease-in-out lg:z-[20] z-[15]`}
       >
         <SideBar
           sideBarOpen={sideBarOpen}
@@ -74,9 +74,8 @@ function Wrapper() {
       </div>
 
       <div
-        className={`${
-          sideBarOpen ? 'w-[calc(100%-80px)]' : 'w-full lg:w-3/4 xl:w-[78%] xxl:w-5/6'
-        } transition-[width] duration-500 ease-in-out`}
+        className={`${sideBarOpen ? 'w-[calc(100%-80px)]' : 'w-full lg:w-3/4 xl:w-[78%] xxl:w-5/6'
+          } transition-[width] duration-500 ease-in-out`}
       >
         <div
           className='bg-white rounded-2xl lg:h-[calc(100vh-32px)] h-[calc(100vh-86px)] overflow-x-hidden relative'
@@ -84,9 +83,8 @@ function Wrapper() {
         >
           {/* Header */}
           <div
-            className={` sticky top-0 bg-white lg:z-[19] z-[14] transition-all duration-300 ease-in-out ${
-              shadow ? 'shadow-cardShadow md:px-6 px-4 md:py-4 py-3' : 'md:px-6 py-3 p-4'
-            }`}
+            className={` sticky top-0 bg-white lg:z-[19] z-[14] transition-all duration-300 ease-in-out ${shadow ? 'shadow-cardShadow md:px-6 px-4 md:py-4 py-3' : 'md:px-6 py-3 p-4'
+              }`}
           >
             <Header />
           </div>

@@ -8,6 +8,7 @@ import { EditGeneralSettings, GetGeneralSettings } from '../../../../services/se
 import { generalSettingsValidationSchema } from '../../../../validations/admin/generalSettingValidationSchema'
 import { useDispatch } from 'react-redux'
 import { hideLoader, showLoader } from '../../../../redux/slices/siteLoaderSlice'
+import { setCompany } from '../../../../redux/slices/companySlice'
 
 function GeneralSettings() {
   const dispatch = useDispatch()
@@ -26,6 +27,7 @@ function GeneralSettings() {
   const fetchSettings = async () => {
     try {
       const response = await GetGeneralSettings()
+      // console.log("fetch settings detail ", response);
       if (response?.data?.data) {
         setDefaultInitialValues({ ...response?.data?.data })
       }
@@ -35,14 +37,18 @@ function GeneralSettings() {
   }
 
   useEffect(() => {
+    // console.log("general seettings");
     fetchSettings()
   }, [])
 
   const OnSubmit = async (data) => {
+    console.log("submiting");
     dispatch(showLoader())
     const response = await EditGeneralSettings(data)
-
-    if (response?.status === 200) {
+    console.log("res from backedn", response);
+    dispatch(setCompany(response.data.data.site_title))
+    if (response?.status == 200) {
+      console.log("res get 200");
       fetchSettings()
     }
     dispatch(hideLoader())
@@ -56,6 +62,7 @@ function GeneralSettings() {
     >
       {({ isSubmitting, handleBlur }) => (
         <Form className='grid grid-cols-12 gap-4'>
+          {/* {console.log("hi iam submitting = ", isSubmitting)} */}
           <div className='md:col-span-6 col-span-12'>
             <FormLabel>Support name</FormLabel>
             <InputType placeholder='Type here' type='text' name='support_name' onBlur={handleBlur} />

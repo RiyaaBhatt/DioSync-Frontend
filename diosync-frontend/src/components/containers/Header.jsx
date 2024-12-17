@@ -438,9 +438,8 @@ function Header() {
                   {userType !== userRoles.SuperAdmin && (
                     <div className='relative' ref={dropdownRef}>
                       <button
-                        className={`md:w-10 md:h-10 sm:w-8 sm:h-8 ${
-                          isOpen === 'notification' ? 'bg-primary-blue' : 'bg-[#F7F7FC]'
-                        } rounded-full flex items-center justify-center relative`}
+                        className={`md:w-10 md:h-10 sm:w-8 sm:h-8 ${isOpen === 'notification' ? 'bg-primary-blue' : 'bg-[#F7F7FC]'
+                          } rounded-full flex items-center justify-center relative`}
                         onClick={() => {
                           getNotifications(page)
                           toggleDropdown('notification')
@@ -504,9 +503,8 @@ function Header() {
                   {userType !== userRoles.SuperAdmin && (
                     <div className='relative' ref={dropdownRef}>
                       <button
-                        className={`md:w-10 md:h-10 sm:w-8 sm:h-8 ${
-                          isOpen === 'cart' ? 'bg-primary-blue' : 'bg-[#F7F7FC]'
-                        } rounded-full flex items-center justify-center relative`}
+                        className={`md:w-10 md:h-10 sm:w-8 sm:h-8 ${isOpen === 'cart' ? 'bg-primary-blue' : 'bg-[#F7F7FC]'
+                          } rounded-full flex items-center justify-center relative`}
                         onClick={() => {
                           toggleDropdown('cart')
                           getCartData(cartPage)
