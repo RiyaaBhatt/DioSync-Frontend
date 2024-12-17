@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FormLabel from '../../../components/core/typography/FormLabel';
-import InputType from '../../../components/core/formComponents/InputType';
+import InputTypeAdmin from '../../../components/core/formComponents/InputTypeAdmin';
 import Button from '../../../components/core/formComponents/Button';
 import SwitchToggle from '../../../components/core/formComponents/SwitchToggle';
 import { ItemsApiAdd, UpdateItems } from '../../../services/itemsService';
@@ -86,7 +86,7 @@ function AddItems({ selectedItem, handleCloseModal, getItemsData }) {
     <form className="grid grid-cols-12 gap-4" onSubmit={handleSubmit}>
       <div className="md:col-span-6 col-span-12">
         <FormLabel>Item Name</FormLabel>
-        <InputType
+        <InputTypeAdmin
           placeholder="Item name"
           type="text"
           name="ItemName"
@@ -97,7 +97,7 @@ function AddItems({ selectedItem, handleCloseModal, getItemsData }) {
 
       <div className="md:col-span-6 col-span-12">
         <FormLabel>Brand Name</FormLabel>
-        <InputType
+        <InputTypeAdmin
           placeholder="Brand name"
           type="text"
           name="BrandName"
@@ -108,7 +108,7 @@ function AddItems({ selectedItem, handleCloseModal, getItemsData }) {
 
       <div className="md:col-span-6 col-span-12">
         <FormLabel>Category</FormLabel>
-        <InputType
+        <InputTypeAdmin
           placeholder="Category"
           type="text"
           name="Category"
@@ -119,7 +119,7 @@ function AddItems({ selectedItem, handleCloseModal, getItemsData }) {
 
       <div className="md:col-span-6 col-span-12">
         <FormLabel>Subcategory</FormLabel>
-        <InputType
+        <InputTypeAdmin
           placeholder="Subcategory"
           type="text"
           name="Subcategory"
@@ -130,7 +130,7 @@ function AddItems({ selectedItem, handleCloseModal, getItemsData }) {
 
       <div className="md:col-span-6 col-span-12">
         <FormLabel>Unit Size</FormLabel>
-        <InputType
+        <InputTypeAdmin
           placeholder="Unit size"
           type="text"
           name="unitSize"
